@@ -62,6 +62,7 @@
   "dependencies": {
     "bech32": "^2.0.0",
     "elliptic": "^6.6.1",
-    "nostr-tools": "^2.13.0"
+    "nostr-tools": "^2.13.0",
+    "permissionless": "^0.2.47"
   }
 }
