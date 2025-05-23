@@ -29,8 +29,10 @@ export const connectService = {
     useGlobalState.getState().setWalletInfo(walletInfo);
     useGlobalState.getState().setNPubKey(nPubkey);
 
+    const publicClient = createPublicClient({chain: sepolia, transport: http("https://eth-sepolia.public.blastapi.io")});
+
     const account = await toNostrSmartAccount({
-      client: createPublicClient({chain: sepolia, transport: http("https://eth-sepolia.public.blastapi.io")}),
+      client: publicClient,
       owner: `0x${pubkey}`
     })
 
@@ -45,10 +47,14 @@ export const connectService = {
 
     console.log(await account.getAddress());
 
+    const estimateFees = await publicClient.estimateFeesPerGas();
+
     const txHash = await bundlerClient.sendTransaction({
       to: '0x66bAd48301609adaa01CB3140D1b1D92bFa03dD5', // address you want to send to
       value: BigInt(1e14),      // amount in wei (e.g., 0.01 ETH)
       data: '0x',               // optional calldata, '0x' for simple ETH transfer
+      maxFeePerGas: estimateFees.maxFeePerGas,
+      maxPriorityFeePerGas: estimateFees.maxPriorityFeePerGas,
     });
 
   console.log('UserOperation hash:', txHash);
