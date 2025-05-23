@@ -4,6 +4,8 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { nostrService } from "~~/services/nostrService";
@@ -57,8 +59,8 @@ export const Header = () => {
       await nostrService.connect();
       const npub = nostrService.getNPubkey();
       setConnectedPubkey(npub);
-    } catch (e) {
-      console.warn("Connection to nostr failed");
+    } catch (e: unknown) {
+      console.warn("Connection to nostr failed", e);
     }
   };
 
@@ -92,13 +94,38 @@ export const Header = () => {
         </ul>
       </div>
       <div className="navbar-end grow mr-4">
-        <button
-          className="btn btn-secondary btn-dash"
-          onClick={handleConnectClick}
-          title={connectedPubkey ?? "You must connect first"}
-        >
-          {connectedPubkey ? connectedPubkey : "You must connect first"}
-        </button>
+        {connectedPubkey ? (
+          <div className="tooltip tooltip-left tippy--fit-width" data-tip={connectedPubkey}>
+            <button
+              className="btn btn-secondary btn-dash max-w-[180px] truncate flex items-center gap-2"
+              onClick={() => {
+                if (connectedPubkey) {
+                  navigator.clipboard.writeText(connectedPubkey);
+                  const toast = document.createElement("div");
+                  toast.className = "toast toast-top toast-end z-50";
+                  toast.innerHTML = `
+                    <div class="alert alert-success">
+                      <span>Copied to clipboard</span>
+                    </div>
+                  `;
+                  document.body.appendChild(toast);
+                  setTimeout(() => toast.remove(), 3000);
+                }
+              }}
+            >
+              {`${connectedPubkey.slice(0, 6)}…${connectedPubkey.slice(-6)}`}
+              <FontAwesomeIcon icon={faCopy} />
+            </button>
+          </div>
+        ) : (
+          <button
+            className="btn btn-secondary btn-dash"
+            onClick={handleConnectClick}
+            title={connectedPubkey ?? "You must connect first"}
+          >
+            You must connect first
+          </button>
+        )}
       </div>
     </div>
   );

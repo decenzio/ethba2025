@@ -97,3 +97,8 @@
 .link:hover {
   opacity: 80%;
 }
+
+
+.tippy--fit-width:before {
+  max-width: unset !important;
+}
