@@ -110,7 +110,6 @@ export type ToSimpleSmartAccountReturnType<entryPointVersion extends EntryPointV
 >;
 
 /**
- * @description Creates an Simple Account from a private key.
  *
  * @returns A Private Key Simple Account.
  */

@@ -11,6 +11,8 @@ import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { connectService } from "~~/services/connectService";
 import { useGlobalState } from "~~/services/store/store";
 
+const SHOW_NAVBAR = false;
+
 type HeaderMenuLink = {
   label: string;
   href: string;
@@ -60,7 +62,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 shrink-0 justify-between z-20 shadow-md px-0 sm:px-2">
+    <div className="sticky lg:static top-0 navbar  min-h-0 shrink-0 justify-between z-20  px-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2">
         <details className="dropdown" ref={burgerMenuRef}>
           <summary className="ml-1 btn btn-ghost lg:hidden hover:bg-transparent">
@@ -84,9 +86,11 @@ export const Header = () => {
             <span className="text-xs">Decenzio</span>
           </div>
         </Link>
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
-          <HeaderMenuLinks />
-        </ul>
+        {SHOW_NAVBAR && (
+          <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
+            <HeaderMenuLinks />
+          </ul>
+        )}
       </div>
       <div className="navbar-end grow mr-4">
         {nPubkey ? (

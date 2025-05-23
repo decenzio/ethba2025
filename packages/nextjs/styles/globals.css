@@ -76,3 +76,19 @@
 .tippy--fit-width:before {
   max-width: unset !important;
 }
+
+
+@keyframes pulse-size {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.2;
+  }
+}
+
+.pulse-size {
+  animation: pulse-size 2s ease-in-out infinite;
+}

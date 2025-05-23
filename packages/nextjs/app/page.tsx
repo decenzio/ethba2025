@@ -28,13 +28,13 @@ const Home: NextPage = () => {
 
   return (
     <div className={"container mx-auto"}>
-      <div className={"flex flex-col gap-5 pt-15"}>
+      <div className={"flex flex-col gap-5"}>
         {pubkey ? (
-          <div className={"flex flex-col gap-8 items-center justify-center grow pt-10 h-fill"}>
+          <div className={"flex flex-col gap-8 items-center justify-center pb-10 grow h-fill"}>
             <WalletInformation />
           </div>
         ) : (
-          <div className="flex flex-col gap-8 items-center justify-center grow pt-10 h-fill">
+          <div className="flex flex-col gap-8 items-center justify-center grow h-fill">
             <ExclamationCircleIcon height="120px" />
             <button className="btn btn-lg btn-secondary" onClick={handleConnectButoon}>
               Connect to nostr idk what
