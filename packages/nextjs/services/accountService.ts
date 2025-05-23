@@ -362,10 +362,7 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
         address: await this.getAddress(),
         entryPointAddress: entryPoint.address
       }).catch(e => {
-        if(e.message.startsWith("ContractFunctionExecutionError:")) {
-          return 0n;
-        }
-        throw e;
+        return 0n;
       });
     },
     async getStubSignature() {
