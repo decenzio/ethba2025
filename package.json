@@ -52,6 +52,7 @@
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
+    "@types/elliptic": "^6",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10"
   },
@@ -59,6 +60,8 @@
     "node": ">=20.18.3"
   },
   "dependencies": {
+    "bech32": "^2.0.0",
+    "elliptic": "^6.6.1",
     "nostr-tools": "^2.13.0"
   }
 }

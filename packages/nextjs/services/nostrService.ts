@@ -10,11 +10,13 @@ export const nostrService = {
    * The result is cached in nostrService.
    */
   async connect(): Promise<string | null> {
+    // @ts-ignore
     if (!window.nostr) {
       throw new Error("nos2x extension not found");
     }
 
     try {
+      // @ts-ignore
       nostrPubkey = await window.nostr.getPublicKey();
       window.dispatchEvent(new CustomEvent("nostr:pubkey", { detail: this.getNPubkey() }));
       return nostrPubkey;
