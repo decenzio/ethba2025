@@ -57,6 +57,7 @@ export const Header = () => {
 
     if (walletInfo) {
       setConnectedPubkey(walletInfo.nostrPubkey);
+      console.log(walletInfo);
     }
   };
 

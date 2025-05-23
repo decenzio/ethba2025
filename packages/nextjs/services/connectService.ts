@@ -12,6 +12,6 @@ export const connectService = {
       return null;
     }
 
-    return generateWalletInfo(pubkey, "0xfactoryAddress", "0xinitCode", "salt");
+    return generateWalletInfo(pubkey, "0x514910771af9ca656af840dff83e8264ecf986ca", "0xc005dc82818d67AF737725bD4bf75435d065D239", "salt");
   },
 };

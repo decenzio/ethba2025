@@ -6,8 +6,13 @@ import { WalletInfo } from "~~/types/walletInfo";
 const ec = new EC("secp256k1");
 
 export function pubkeyToEthAddress(pubkey: string): string {
-  const key = ec.keyFromPublic(pubkey, "hex");
+  // Convert raw 32-byte pubkey (X-only from Nostr) to a compressed format (prefix 02 for even Y)
+  const compressedPubkey = `02${pubkey}`;
+  const key = ec.keyFromPublic(compressedPubkey, "hex");
+
+  // Get uncompressed public key (04 + X + Y)
   const uncompressed = key.getPublic(false, "hex");
+
   const uncompressedBytes = Uint8Array.from(Buffer.from(uncompressed, "hex"));
   const ethAddress = keccak256(uncompressedBytes).slice(-40);
   return getAddress("0x" + ethAddress);
