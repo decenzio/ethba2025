@@ -75,7 +75,7 @@ export const Balance = ({ address, className = "", usdMode, render }: BalancePro
 
   return (
     <button
-      className={`btn btn-sm btn-ghost flex flex-col font-normal items-center hover:bg-transparent ${className}`}
+      className={`btn btn-sm btn-ghost flex flex-col font-normal items-center text-4xl h-[40px] flex items-center p-0 ${className}`}
       onClick={toggleDisplayUsdMode}
       type="button"
     >

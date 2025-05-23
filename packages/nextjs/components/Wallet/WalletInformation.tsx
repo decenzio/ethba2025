@@ -17,7 +17,9 @@ const WalletInformation = ({ className }: { className?: string }) => {
           render={({ display, isLoading, isError }) => {
             let bgClasses = "bg-white pulse-size";
             if (isError) {
+              //   wtf, it is correct even with error, so...
               bgClasses = "bg-red-500 opacity-50 transition-all scale-[1.4]";
+              bgClasses = "bg-white pulse-size";
             } else if (!isLoading) {
               bgClasses = "bg-green-400 opacity-40 pulse-size";
             }
@@ -35,8 +37,8 @@ const WalletInformation = ({ className }: { className?: string }) => {
         <div className="card bg-gradient-to-r from-accent-content via-secondary/100 to-accent shadow-xl text-white w-110">
           <div className="card-body min-h-[250px]">
             <h2 className="card-title text-lg font-semibold">Wallet Balance</h2>
-            <div className="text-2xl h-[40px] flex items-center">
-                <Balance address={"0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"} />
+            <div className="">
+              <Balance address={"0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"} />
             </div>
             <div className="card-actions justify-end mt-4">
               <WalletInteraction />
