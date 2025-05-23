@@ -23,6 +23,8 @@ type GlobalState = {
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => void;
   walletInfo: WalletInfo | null;
   setWalletInfo: (walletInfo: WalletInfo | null) => void;
+  nPubkey: string;
+  setNPubKey: (nPubkey: string) => void;
 };
 
 export const useGlobalState = create<GlobalState>(set => ({
@@ -31,6 +33,7 @@ export const useGlobalState = create<GlobalState>(set => ({
     isFetching: true,
   },
   walletInfo: null,
+  nPubkey: "",
   setNativeCurrencyPrice: (newValue: number): void =>
     set(state => ({ nativeCurrency: { ...state.nativeCurrency, price: newValue } })),
   setIsNativeCurrencyFetching: (newValue: boolean): void =>
@@ -41,4 +44,5 @@ export const useGlobalState = create<GlobalState>(set => ({
   },
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => set(() => ({ targetNetwork: newTargetNetwork })),
   setWalletInfo: (walletInfo: WalletInfo | null) => set(() => ({ walletInfo })),
+  setNPubKey: (nPubkey: string) => set(() => ({ nPubkey })),
 }));

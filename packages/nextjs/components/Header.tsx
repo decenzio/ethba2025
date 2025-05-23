@@ -53,11 +53,10 @@ export const Header = () => {
   const [connectedPubkey, setConnectedPubkey] = React.useState<string | null>(null);
 
   const handleConnectClick = async () => {
-    const walletInfo = await connectService.connect();
+    const response = await connectService.connect();
 
-    if (walletInfo) {
-      setConnectedPubkey(walletInfo.nostrPubkey);
-      console.log(walletInfo);
+    if (response) {
+      setConnectedPubkey(response.nPubkey);
     }
   };
 

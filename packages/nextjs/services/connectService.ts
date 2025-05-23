@@ -1,14 +1,15 @@
 import { generateWalletInfo } from "~~/services/deriveAddressService";
 import { nostrService } from "~~/services/nostrService";
 import { useGlobalState } from "~~/services/store/store";
-import { WalletInfo } from "~~/types/walletInfo";
+import type { ConnectService, WalletInfo } from "~~/types/import";
 
 export const connectService = {
-  async connect(): Promise<WalletInfo | null> {
+  async connect(): Promise<ConnectService | null> {
     await nostrService.connect();
     const pubkey: string | null = nostrService.getPubkey();
+    const nPubkey: string | null = nostrService.getNPubkey();
 
-    if (!pubkey) {
+    if (!nPubkey || !pubkey) {
       return null;
     }
 
@@ -20,7 +21,7 @@ export const connectService = {
     );
 
     useGlobalState.getState().setWalletInfo(walletInfo);
-    console.log(walletInfo);
-    return walletInfo;
+    useGlobalState.getState().setNPubKey(nPubkey);
+    return { walletInfo: walletInfo, nPubkey: nPubkey };
   },
 };
