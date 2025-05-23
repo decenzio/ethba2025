@@ -98,7 +98,7 @@ export const Header = () => {
                 if (connectedPubkey) {
                   navigator.clipboard.writeText(connectedPubkey);
                   const toast = document.createElement("div");
-                  toast.className = "toast toast-top toast-end z-50";
+                  toast.className = "toast toast-bottom toast-end z-50";
                   toast.innerHTML = `
                     <div class="alert alert-success">
                       <span>Copied to clipboard</span>
