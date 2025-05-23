@@ -2,7 +2,9 @@
 
 import React from "react";
 import type { NextPage } from "next";
-import { WalletInformation, WalletInteraction } from "~~/components/Wallet/import";
+import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
+import { WalletInformation } from "~~/components/Wallet/import";
+import { connectService } from "~~/services/connectService";
 
 const Home: NextPage = () => {
   const [pubkey, setPubkey] = React.useState<string | null>(null);
@@ -20,17 +22,24 @@ const Home: NextPage = () => {
     };
   }, []);
 
+  const handleConnectButoon = async () => {
+    await connectService.connect();
+  };
+
   return (
     <div className={"container mx-auto"}>
       <div className={"flex flex-col gap-5 pt-15"}>
         {pubkey ? (
-          <>
-            <div className="flex items-center flex-col grow pt-10">Your public key: {pubkey}</div>
+          <div className={"flex flex-col gap-8 items-center justify-center grow pt-10 h-fill"}>
             <WalletInformation />
-            <WalletInteraction />
-          </>
+          </div>
         ) : (
-          <p className="text-center">TODO add button to connect</p>
+          <div className="flex flex-col gap-8 items-center justify-center grow pt-10 h-fill">
+            <ExclamationCircleIcon height="120px" />
+            <button className="btn btn-lg btn-secondary" onClick={handleConnectButoon}>
+              Connect to nostr idk what
+            </button>
+          </div>
         )}
       </div>
     </div>

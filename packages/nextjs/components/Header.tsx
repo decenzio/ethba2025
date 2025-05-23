@@ -9,6 +9,7 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { WalletToggle } from "~~/components/Wallet/import";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { connectService } from "~~/services/connectService";
+import { useGlobalState } from "~~/services/store/store";
 
 type HeaderMenuLink = {
   label: string;
@@ -48,18 +49,14 @@ export const HeaderMenuLinks = () => {
  */
 export const Header = () => {
   const burgerMenuRef = useRef<HTMLDetailsElement>(null);
+  const nPubkey = useGlobalState(state => state.nPubkey);
+
   useOutsideClick(burgerMenuRef, () => {
     burgerMenuRef?.current?.removeAttribute("open");
   });
 
-  const [connectedPubkey, setConnectedPubkey] = React.useState<string | null>(null);
-
   const handleConnectClick = async () => {
-    const response = await connectService.connect();
-
-    if (response) {
-      setConnectedPubkey(response.nPubkey);
-    }
+    await connectService.connect();
   };
 
   return (
@@ -92,14 +89,10 @@ export const Header = () => {
         </ul>
       </div>
       <div className="navbar-end grow mr-4">
-        {connectedPubkey ? (
+        {nPubkey ? (
           <WalletToggle />
         ) : (
-          <button
-            className="btn btn-secondary btn-dash"
-            onClick={handleConnectClick}
-            title={connectedPubkey ?? "You must connect first"}
-          >
+          <button className="btn btn-secondary btn-dash" onClick={handleConnectClick} title={"You must connect first"}>
             <ExclamationTriangleIcon className="h-1/2" />
             You must connect first
           </button>

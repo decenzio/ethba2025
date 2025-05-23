@@ -8,18 +8,16 @@ const WalletToggle = ({ className }: { className?: string }) => {
   const nPubkey = useGlobalState(state => state.nPubkey);
 
   const handleCopy = async (value: string) => {
-    if (nPubkey) {
-      navigator.clipboard.writeText(value);
-      const toast = document.createElement("div");
-      toast.className = "toast toast-bottom toast-end z-50";
-      toast.innerHTML = `
+    navigator.clipboard.writeText(value);
+    const toast = document.createElement("div");
+    toast.className = "toast toast-bottom toast-end z-50";
+    toast.innerHTML = `
                     <div class="alert alert-success">
                       <span>Copied to clipboard</span>
                     </div>
                   `;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
   };
 
   const WalletField = ({ label, value }: { label: string; value: string }) => (
