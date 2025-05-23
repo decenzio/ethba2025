@@ -45,10 +45,13 @@ export const connectService = {
 
     console.log(await account.getAddress());
 
-    // Consume bundler, paymaster, and smart account actions!
-    const userOperationReceipt = await bundlerClient.getUserOperationReceipt({
-      hash: "0x5faea6a3af76292c2b23468bbea96ef63fb31360848be195748437f0a79106c8",
+    const txHash = await bundlerClient.sendTransaction({
+      to: '0x66bAd48301609adaa01CB3140D1b1D92bFa03dD5', // address you want to send to
+      value: BigInt(1e16),      // amount in wei (e.g., 0.01 ETH)
+      data: '0x',               // optional calldata, '0x' for simple ETH transfer
     });
+
+  console.log('UserOperation hash:', txHash);
 
     return { walletInfo: walletInfo, nPubkey: nPubkey };
   },
