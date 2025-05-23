@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bars3Icon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-import { nostrService } from "~~/services/nostrService";
+import { connectService } from "~~/services/connectService";
 
 type HeaderMenuLink = {
   label: string;
@@ -53,12 +53,10 @@ export const Header = () => {
   const [connectedPubkey, setConnectedPubkey] = React.useState<string | null>(null);
 
   const handleConnectClick = async () => {
-    try {
-      await nostrService.connect();
-      const npub = nostrService.getNPubkey();
-      setConnectedPubkey(npub);
-    } catch (e: unknown) {
-      console.warn("Connection to nostr failed", e);
+    const walletInfo = await connectService.connect();
+
+    if (walletInfo) {
+      setConnectedPubkey(walletInfo.nostrPubkey);
     }
   };
 
