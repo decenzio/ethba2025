@@ -14,7 +14,7 @@ const WalletInformation = ({ className }: { className?: string }) => {
       <div className="card bg-gradient-to-r from-accent-content via-secondary/70 to-accent shadow-xl text-white w-110">
         <div className="card-body">
           <h2 className="card-title text-lg font-semibold">Wallet Balance</h2>
-          <Balance address={"vitalik.eth"} />
+          <Balance address={"0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"} />
           <div className="card-actions justify-end mt-4">
             <WalletInteraction />
           </div>
