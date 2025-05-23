@@ -408,7 +408,7 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
 
       //@ts-ignore
       const result = await window.nostr.signEvent({ created_at: 0, kind: 96024, tags: [], content: sigHash.substring(2)});
-      return `0x${result.signature}`;
+      return `0x${result.sig}`;
     },
   }) as Promise<ToSimpleSmartAccountReturnType<entryPointVersion>>;
 }
