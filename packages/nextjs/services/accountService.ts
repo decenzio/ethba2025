@@ -390,7 +390,6 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
             signature: "0x",
           },
         });
-        //TODO: Here we need to sign typed data with nostr
         sigHash = hashTypedData(typedData);
       } else {
         sigHash = getUserOperationHash({
@@ -405,9 +404,9 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
         });
       }
 
-      //TODO: Here we need to sign with nostr
-      return "0x....gib signature here...";
-      
+      //@ts-ignore
+      const result = await window.nostr.signEvent({ created_at: 0, kind: 96024, tags: [], content: sigHash.substring(2)});
+      return "0x"+result.signature;
     },
   }) as Promise<ToSimpleSmartAccountReturnType<entryPointVersion>>;
 }
