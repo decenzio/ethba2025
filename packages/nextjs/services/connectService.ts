@@ -47,7 +47,7 @@ export const connectService = {
 
     const txHash = await bundlerClient.sendTransaction({
       to: '0x66bAd48301609adaa01CB3140D1b1D92bFa03dD5', // address you want to send to
-      value: BigInt(1e16),      // amount in wei (e.g., 0.01 ETH)
+      value: BigInt(1e14),      // amount in wei (e.g., 0.01 ETH)
       data: '0x',               // optional calldata, '0x' for simple ETH transfer
     });
 
