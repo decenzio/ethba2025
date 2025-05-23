@@ -38,7 +38,7 @@ const WalletInformation = ({ className }: { className?: string }) => {
           <div className="card-body min-h-[250px]">
             <h2 className="card-title text-lg font-semibold">Wallet Balance</h2>
             <div className="">
-              <Balance address={"0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"} />
+              <Balance address={"0x0AAD784EB328eDf8b8fAF1c7416C3dbFD1605e0A"} />
             </div>
             <div className="card-actions justify-end mt-4">
               <WalletInteraction />
