@@ -1,16 +1,27 @@
 import { toOwner } from "permissionless";
-import { getAccountNonce } from "permissionless/actions";
 import {
   type Address,
   type Assign,
+  AuthorizationRequest,
   type Chain,
   type Client,
+  GetTransactionType,
+  Hash,
   type Hex,
+  IsNarrowable,
   type JsonRpcAccount,
   type LocalAccount,
+  NonceManager,
+  SerializeTransactionFn,
+  SignableMessage,
+  TransactionSerializable,
+  TransactionSerialized,
   type Transport,
+  TypedData,
+  TypedDataDefinition,
   decodeFunctionData,
   encodeFunctionData,
+  hashTypedData
 } from "viem";
 import {
   type EntryPointVersion,
@@ -21,14 +32,85 @@ import {
   entryPoint07Abi,
   entryPoint07Address,
   entryPoint08Abi,
+  entryPoint08Address,
   getUserOperationHash,
   getUserOperationTypedData,
   toSmartAccount,
 } from "viem/account-abstraction";
 import { getChainId, signMessage } from "viem/actions";
 import { getAction } from "viem/utils";
+import { readContract } from "viem/actions"
+import { SignAuthorizationReturnType } from "viem/accounts";
+import { getSenderAddress } from "./getSenderAddress";
 
-const getAccountInitCode = async (owner: Address, index = BigInt(0)): Promise<Hex> => {
+export type GetAccountNonceParams = {
+    address: Address
+    entryPointAddress: Address
+}
+
+/**
+ * Returns the nonce of the account with the entry point.
+ *
+ * - Docs: https://docs.pimlico.io/permissionless/reference/public-actions/getAccountNonce
+ *
+ * @param client {@link client} that you created using viem's createPublicClient.
+ * @param args {@link GetAccountNonceParams} address, entryPoint & key
+ * @returns bigint nonce
+ *
+ * @example
+ * import { createPublicClient } from "viem"
+ * import { getAccountNonce } from "permissionless/actions"
+ *
+ * const client = createPublicClient({
+ *      chain: goerli,
+ *      transport: http("https://goerli.infura.io/v3/your-infura-key")
+ * })
+ *
+ * const nonce = await getAccountNonce(client, {
+ *      address,
+ *      entryPoint,
+ *      key
+ * })
+ *
+ * // Return 0n
+ */
+export const getAccountNonce = async (
+    client: Client,
+    args: GetAccountNonceParams
+): Promise<bigint> => {
+    const { address, entryPointAddress} = args
+
+    return await getAction(
+        client,
+        readContract,
+        "readContract"
+    )({
+        address: entryPointAddress,
+        abi: [
+            {
+                inputs: [
+                    {
+                        name: "sender",
+                        type: "address"
+                    }
+                ],
+                name: "getNonce",
+                outputs: [
+                    {
+                        name: "nonce",
+                        type: "uint256"
+                    }
+                ],
+                stateMutability: "view",
+                type: "function"
+            }
+        ],
+        functionName: "getNonce",
+        args: [address]
+    })
+}
+
+const getAccountInitCode = async (owner: string, index = BigInt(0)): Promise<Hex> => {
   if (!owner) throw new Error("Owner account not found");
 
   return encodeFunctionData({
@@ -36,9 +118,9 @@ const getAccountInitCode = async (owner: Address, index = BigInt(0)): Promise<He
       {
         inputs: [
           {
-            internalType: "address",
+            internalType: "uint256",
             name: "owner",
-            type: "address",
+            type: "uint256",
           },
           {
             internalType: "uint256",
@@ -49,7 +131,7 @@ const getAccountInitCode = async (owner: Address, index = BigInt(0)): Promise<He
         name: "createAccount",
         outputs: [
           {
-            internalType: "contract SimpleAccount",
+            internalType: "contract NostrAccount",
             name: "ret",
             type: "address",
           },
@@ -59,13 +141,13 @@ const getAccountInitCode = async (owner: Address, index = BigInt(0)): Promise<He
       },
     ],
     functionName: "createAccount",
-    args: [owner, index],
+    args: [BigInt(owner), index],
   });
 };
 
 export type ToSimpleSmartAccountParameters<entryPointVersion extends EntryPointVersion> = {
   client: Client<Transport, Chain | undefined, JsonRpcAccount | LocalAccount | undefined>;
-  owner: string;
+  owner: `0x${string}`;
   factoryAddress?: Address;
   entryPoint?: {
     address: Address;
@@ -73,7 +155,6 @@ export type ToSimpleSmartAccountParameters<entryPointVersion extends EntryPointV
   };
   index?: bigint;
   address?: Address;
-  nonceKey?: bigint;
 };
 
 const getFactoryAddress = (entryPointVersion: EntryPointVersion, factoryAddress?: Address): Address => {
@@ -81,11 +162,9 @@ const getFactoryAddress = (entryPointVersion: EntryPointVersion, factoryAddress?
 
   switch (entryPointVersion) {
     case "0.8":
-      return "0x13E9ed32155810FDbd067D4522C492D6f68E5944";
-    case "0.7":
-      return "0x91E60e0613810449d098b0b5Ec8b51A0FE8c8985";
+      return "0xaCeEF9bf23b41D4898516D2Fdcd7b4BDc22444D7";
     default:
-      return "0x9406Cc6185a346906296840746125a0E44976454";
+      throw new Error("Unsupported entrypoint version");
   }
 };
 
@@ -93,19 +172,17 @@ const getEntryPointAbi = (entryPointVersion: EntryPointVersion) => {
   switch (entryPointVersion) {
     case "0.8":
       return entryPoint08Abi;
-    case "0.7":
-      return entryPoint07Abi;
     default:
-      return entryPoint06Abi;
+      throw new Error("Unsupported entrypoint version");
   }
 };
 
-export type SimpleSmartAccountImplementation<entryPointVersion extends EntryPointVersion = "0.7"> = Assign<
+export type SimpleSmartAccountImplementation<entryPointVersion extends EntryPointVersion = "0.8"> = Assign<
   SmartAccountImplementation<ReturnType<typeof getEntryPointAbi>, entryPointVersion>,
   { sign: NonNullable<SmartAccountImplementation["sign"]> }
 >;
 
-export type ToSimpleSmartAccountReturnType<entryPointVersion extends EntryPointVersion = "0.7"> = SmartAccount<
+export type ToSimpleSmartAccountReturnType<entryPointVersion extends EntryPointVersion = "0.8"> = SmartAccount<
   SimpleSmartAccountImplementation<entryPointVersion>
 >;
 
@@ -114,13 +191,11 @@ export type ToSimpleSmartAccountReturnType<entryPointVersion extends EntryPointV
  *
  * @returns A Private Key Simple Account.
  */
-export async function toSimpleSmartAccount<entryPointVersion extends EntryPointVersion>(
+export async function toNostrSmartAccount<entryPointVersion extends EntryPointVersion>(
   parameters: ToSimpleSmartAccountParameters<entryPointVersion>,
 ): Promise<ToSimpleSmartAccountReturnType<entryPointVersion>> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { client, owner, factoryAddress: _factoryAddress, index = BigInt(0), address, nonceKey } = parameters;
-
-  const localOwner = await toOwner({ owner });
+  const { client, owner, factoryAddress: _factoryAddress, index = BigInt(0), address } = parameters;
 
   const entryPoint = parameters.entryPoint
     ? {
@@ -129,14 +204,14 @@ export async function toSimpleSmartAccount<entryPointVersion extends EntryPointV
         version: parameters.entryPoint.version,
       }
     : ({
-        address: entryPoint07Address,
-        abi: getEntryPointAbi("0.7"),
-        version: "0.7",
+        address: entryPoint08Address,
+        abi: getEntryPointAbi("0.8"),
+        version: "0.8",
       } as const);
 
   const factoryAddress = getFactoryAddress(entryPoint.version, _factoryAddress);
 
-  // const accountAddress: Address | undefined = address;
+  let accountAddress: string | undefined = address;
 
   let chainId: number;
 
@@ -149,7 +224,7 @@ export async function toSimpleSmartAccount<entryPointVersion extends EntryPointV
   const getFactoryArgs = async () => {
     return {
       factory: factoryAddress,
-      factoryData: await getAccountInitCode(localOwner.address, index),
+      factoryData: await getAccountInitCode(owner, index),
     };
   };
 
@@ -158,7 +233,6 @@ export async function toSimpleSmartAccount<entryPointVersion extends EntryPointV
     entryPoint,
     getFactoryArgs,
     async getAddress() {
-      /*
       if (accountAddress) return accountAddress;
 
       const { factory, factoryData } = await getFactoryArgs();
@@ -171,9 +245,6 @@ export async function toSimpleSmartAccount<entryPointVersion extends EntryPointV
       });
 
       return accountAddress;
-
-       */
-      return "";
     },
     async encodeCalls(calls) {
       if (calls.length > 1) {
@@ -305,12 +376,11 @@ export async function toSimpleSmartAccount<entryPointVersion extends EntryPointV
     async getNonce(args) {
       return getAccountNonce(client, {
         address: await this.getAddress(),
-        entryPointAddress: entryPoint.address,
-        key: nonceKey ?? args?.key,
+        entryPointAddress: entryPoint.address
       });
     },
     async getStubSignature() {
-      return "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
+      return "0xfffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c";
     },
     async sign({ hash }) {
       return this.signMessage({ message: hash });
@@ -325,6 +395,7 @@ export async function toSimpleSmartAccount<entryPointVersion extends EntryPointV
       const { chainId = await getMemoizedChainId(), ...userOperation } = parameters;
 
       // 0.8 Signs using typed data
+      let sigHash: `0x${string}`;
       if (entryPoint.version === "0.8") {
         const typedData = getUserOperationTypedData({
           chainId,
@@ -335,24 +406,24 @@ export async function toSimpleSmartAccount<entryPointVersion extends EntryPointV
             signature: "0x",
           },
         });
-        return await localOwner.signTypedData(typedData);
+        //TODO: Here we need to sign typed data with nostr
+        sigHash = hashTypedData(typedData);
+      } else {
+        sigHash = getUserOperationHash({
+          userOperation: {
+            ...userOperation,
+            sender: userOperation.sender ?? (await this.getAddress()),
+            signature: "0x",
+          } as UserOperation<entryPointVersion>,
+          entryPointAddress: entryPoint.address,
+          entryPointVersion: entryPoint.version,
+          chainId: chainId,
+        });
       }
 
-      return signMessage(client, {
-        account: localOwner,
-        message: {
-          raw: getUserOperationHash({
-            userOperation: {
-              ...userOperation,
-              sender: userOperation.sender ?? (await this.getAddress()),
-              signature: "0x",
-            } as UserOperation<entryPointVersion>,
-            entryPointAddress: entryPoint.address,
-            entryPointVersion: entryPoint.version,
-            chainId: chainId,
-          }),
-        },
-      });
+      //TODO: Here we need to sign with nostr
+      return "0x....gib signature here...";
+      
     },
   }) as Promise<ToSimpleSmartAccountReturnType<entryPointVersion>>;
 }
