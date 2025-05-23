@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { NextPage } from "next";
-import { UserWallet } from "~~/components/UserWallet";
+import { WalletInformation, WalletInteraction } from "~~/components/Wallet/import";
 
 const Home: NextPage = () => {
   const [pubkey, setPubkey] = React.useState<string | null>(null);
@@ -26,7 +26,8 @@ const Home: NextPage = () => {
         {pubkey ? (
           <>
             <div className="flex items-center flex-col grow pt-10">Your public key: {pubkey}</div>
-            <UserWallet />
+            <WalletInformation />
+            <WalletInteraction />
           </>
         ) : (
           <p className="text-center">TODO add button to connect</p>

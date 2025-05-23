@@ -2,7 +2,7 @@
 
 import React from "react";
 
-export const UserWallet = ({ className }: { className?: string }) => {
+const WalletInteraction = ({ className }: { className?: string }) => {
   return (
     <div className={className}>
       <div className="flex w-full flex-col lg:flex-row items-center justify-center">
@@ -13,3 +13,5 @@ export const UserWallet = ({ className }: { className?: string }) => {
     </div>
   );
 };
+
+export default WalletInteraction;

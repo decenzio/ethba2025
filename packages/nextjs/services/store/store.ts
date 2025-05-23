@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import scaffoldConfig from "~~/scaffold.config";
+import { WalletInfo } from "~~/types/walletInfo";
 import { ChainWithAttributes, NETWORKS_EXTRA_DATA } from "~~/utils/scaffold-eth";
 
 /**
@@ -20,6 +21,8 @@ type GlobalState = {
   setIsNativeCurrencyFetching: (newIsNativeCurrencyFetching: boolean) => void;
   targetNetwork: ChainWithAttributes;
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => void;
+  walletInfo: WalletInfo | null;
+  setWalletInfo: (walletInfo: WalletInfo | null) => void;
 };
 
 export const useGlobalState = create<GlobalState>(set => ({
@@ -27,6 +30,7 @@ export const useGlobalState = create<GlobalState>(set => ({
     price: 0,
     isFetching: true,
   },
+  walletInfo: null,
   setNativeCurrencyPrice: (newValue: number): void =>
     set(state => ({ nativeCurrency: { ...state.nativeCurrency, price: newValue } })),
   setIsNativeCurrencyFetching: (newValue: boolean): void =>
@@ -36,4 +40,5 @@ export const useGlobalState = create<GlobalState>(set => ({
     ...NETWORKS_EXTRA_DATA[scaffoldConfig.targetNetworks[0].id],
   },
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => set(() => ({ targetNetwork: newTargetNetwork })),
+  setWalletInfo: (walletInfo: WalletInfo | null) => set(() => ({ walletInfo })),
 }));
