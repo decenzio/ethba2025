@@ -1,17 +1,28 @@
 "use client";
 
-import Link from "next/link";
+import React from "react";
 import type { NextPage } from "next";
-import { useAccount } from "wagmi";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { nostrService } from "~~/services/nostrService";
 
 const Home: NextPage = () => {
-  // const { address: connectedAddress } = useAccount();
+  const [pubkey, setPubkey] = React.useState<string | null>(null);
+
+  // Listing to nostr pubkey changes
+  React.useEffect(() => {
+    const handlePubkeyChange = (event: CustomEvent<string>) => {
+      setPubkey(event.detail);
+    };
+
+    window.addEventListener("nostr:pubkey", handlePubkeyChange as EventListener);
+
+    return () => {
+      window.removeEventListener("nostr:pubkey", handlePubkeyChange as EventListener);
+    };
+  }, []);
 
   return (
     <>
-      <div className="flex items-center flex-col grow pt-10">mew</div>
+      <div className="flex items-center flex-col grow pt-10">Your public key: {pubkey ?? "Not connected"}</div>
     </>
   );
 };
