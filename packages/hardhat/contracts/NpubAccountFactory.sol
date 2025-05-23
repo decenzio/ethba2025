@@ -13,7 +13,7 @@ import "./NpubAccount.sol";
  * The factory's createAccount returns the target account address even if it is already installed.
  * This way, the entryPoint.getSenderAddress() can be called either before or after the account is created.
  */
-contract SimpleAccountFactory {
+contract NpubAccountFactory {
     NpubAccount public immutable accountImplementation;
     ISenderCreator public immutable senderCreator;
 
