@@ -361,7 +361,8 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
       return getAccountNonce(client, {
         address: await this.getAddress(),
         entryPointAddress: entryPoint.address
-      }).catch(() => {
+      }).catch((e) => {
+        console.error(e);
         return 0n;
       });
     },
