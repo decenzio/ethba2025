@@ -4,7 +4,9 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bars3Icon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
+import { WalletToggle } from "~~/components/Wallet/import";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { connectService } from "~~/services/connectService";
 
@@ -91,34 +93,14 @@ export const Header = () => {
       </div>
       <div className="navbar-end grow mr-4">
         {connectedPubkey ? (
-          <div className="tooltip tooltip-left tippy--fit-width" data-tip={connectedPubkey}>
-            <button
-              className="btn btn-secondary btn-dash max-w-[180px] truncate flex items-center gap-2"
-              onClick={() => {
-                if (connectedPubkey) {
-                  navigator.clipboard.writeText(connectedPubkey);
-                  const toast = document.createElement("div");
-                  toast.className = "toast toast-bottom toast-end z-50";
-                  toast.innerHTML = `
-                    <div class="alert alert-success">
-                      <span>Copied to clipboard</span>
-                    </div>
-                  `;
-                  document.body.appendChild(toast);
-                  setTimeout(() => toast.remove(), 3000);
-                }
-              }}
-            >
-              {`${connectedPubkey.slice(0, 6)}…${connectedPubkey.slice(-6)}`}
-              <DocumentDuplicateIcon className="h-1/2" />
-            </button>
-          </div>
+          <WalletToggle />
         ) : (
           <button
             className="btn btn-secondary btn-dash"
             onClick={handleConnectClick}
             title={connectedPubkey ?? "You must connect first"}
           >
+            <ExclamationTriangleIcon className="h-1/2" />
             You must connect first
           </button>
         )}
