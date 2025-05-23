@@ -357,10 +357,15 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
         ];
       }
     },
-    async getNonce(args) {
+    async getNonce() {
       return getAccountNonce(client, {
         address: await this.getAddress(),
         entryPointAddress: entryPoint.address
+      }).catch(e => {
+        if(e.message.startsWith("ContractFunctionExecutionError:")) {
+          return 0n;
+        }
+        throw e;
       });
     },
     async getStubSignature() {
