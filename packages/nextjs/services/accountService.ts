@@ -1,24 +1,12 @@
-import { toOwner } from "permissionless";
 import {
   type Address,
   type Assign,
-  AuthorizationRequest,
   type Chain,
   type Client,
-  GetTransactionType,
-  Hash,
   type Hex,
-  IsNarrowable,
   type JsonRpcAccount,
   type LocalAccount,
-  NonceManager,
-  SerializeTransactionFn,
-  SignableMessage,
-  TransactionSerializable,
-  TransactionSerialized,
   type Transport,
-  TypedData,
-  TypedDataDefinition,
   decodeFunctionData,
   encodeFunctionData,
   hashTypedData
@@ -28,19 +16,15 @@ import {
   type SmartAccount,
   type SmartAccountImplementation,
   type UserOperation,
-  entryPoint06Abi,
-  entryPoint07Abi,
-  entryPoint07Address,
   entryPoint08Abi,
   entryPoint08Address,
   getUserOperationHash,
   getUserOperationTypedData,
   toSmartAccount,
 } from "viem/account-abstraction";
-import { getChainId, signMessage } from "viem/actions";
+import { getChainId } from "viem/actions";
 import { getAction } from "viem/utils";
 import { readContract } from "viem/actions"
-import { SignAuthorizationReturnType } from "viem/accounts";
 import { getSenderAddress } from "./getSenderAddress";
 
 export type GetAccountNonceParams = {
