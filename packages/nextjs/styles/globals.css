@@ -9,7 +9,7 @@
 
 @plugin "daisyui" {
   themes:
-    dark --prefersdark;
+    dark --default;
 }
 
 @plugin "daisyui/theme" {
