@@ -64,34 +64,38 @@ export const getAccountNonce = async (
 ): Promise<bigint> => {
     const { address, entryPointAddress} = args
 
-    return await getAction(
-        client,
-        readContract,
-        "readContract"
-    )({
-        address: entryPointAddress,
-        abi: [
-            {
-                inputs: [
-                    {
-                        name: "sender",
-                        type: "address"
-                    }
-                ],
-                name: "getNonce",
-                outputs: [
-                    {
-                        name: "nonce",
-                        type: "uint256"
-                    }
-                ],
-                stateMutability: "view",
-                type: "function"
-            }
+  return await getAction(
+      client,
+      readContract,
+      "readContract"
+  )({
+    address: entryPointAddress,
+    abi: [
+      {
+        inputs: [
+          {
+            name: "sender",
+            type: "address"
+          },
+          {
+            name: "key",
+            type: "uint192"
+          }
         ],
-        functionName: "getNonce",
-        args: [address]
-    })
+        name: "getNonce",
+        outputs: [
+          {
+            name: "nonce",
+            type: "uint256"
+          }
+        ],
+        stateMutability: "view",
+        type: "function"
+      }
+    ],
+    functionName: "getNonce",
+    args: [address, 0n]
+  })
 }
 
 const getAccountInitCode = async (owner: string, index = BigInt(0)): Promise<Hex> => {
