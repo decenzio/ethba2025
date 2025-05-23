@@ -4,9 +4,7 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Bars3Icon } from "@heroicons/react/24/outline";
+import { Bars3Icon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { nostrService } from "~~/services/nostrService";
 
@@ -114,7 +112,7 @@ export const Header = () => {
               }}
             >
               {`${connectedPubkey.slice(0, 6)}…${connectedPubkey.slice(-6)}`}
-              <FontAwesomeIcon icon={faCopy} />
+              <DocumentDuplicateIcon className="h-1/2" />
             </button>
           </div>
         ) : (
