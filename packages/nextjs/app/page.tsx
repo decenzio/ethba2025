@@ -6,7 +6,7 @@ import { MagnifyingGlassCircleIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { ErrorDialog, ReceiveDialog, SearchWalletAddressDialog, SendDialog, WalletCard } from "~~/components/import";
 import { connectService } from "~~/services/connectService";
-import { importantLivingBeing } from "~~/services/importantLivingBeing";
+import { importantLivingBeing } from "~~/services/importantLivingBeing/importantLivingBeing";
 
 const BE_ALIVE = true;
 
