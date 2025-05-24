@@ -55,7 +55,7 @@ const Home: NextPage = () => {
                 <u className="hover:no-underline cursor-pointer" onClick={handleConnectButton}>
                   connect
                 </u>{" "}
-                to your nostr account.
+                to your Nostr account.
               </p>
               <div className="opacity-0 animate-slideIn delay-1000">
                 <button

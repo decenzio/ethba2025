@@ -2,24 +2,25 @@
 
 import React, { useState } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/16/solid";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { transactionService } from "~~/services/transactionService";
 
 const SendDialog = ({ className, id }: { className?: string; id: string }) => {
   const [walletAddress, setWalletAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successHash, setSuccessHash] = useState("fdf8cbd7183fad2f641c58e17345576");
   const [isSending, setIsSending] = useState(false);
 
   const handleSend = async () => {
     setErrorMessage("");
-    setSuccessMessage("");
+    setSuccessHash("");
     setIsSending(true);
     try {
       const weiAmount = BigInt(Math.floor(parseFloat(amount) * 1e18));
       const txHash = await transactionService.sendTransaction(walletAddress, weiAmount);
       if (txHash) {
-        setSuccessMessage(`Transaction sent! ${txHash}`);
+        setSuccessHash(txHash);
       } else {
         setErrorMessage("Transaction failed.");
       }
@@ -56,9 +57,20 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
               onChange={e => setAmount(e.target.value)}
             />
             {errorMessage && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
-            {successMessage && (
+            {successHash && (
               <div className="w-full">
-                <p className="text-green-500 text-sm mt-1 break-all">{successMessage}</p>
+                <p className="text-green-500 text-sm mt-1 break-all">
+                  Transaction sent!
+                  <a
+                    href={`https://basescan.org/tx/${successHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-400 underline mt-1 ml-2 underline hover:no-underline flex-inline items-center"
+                  >
+                    <span>Open in explorer.</span>{" "}
+                    <ArrowTopRightOnSquareIcon className="inline h-4 w-4 ml-1 relative -top-[2px]" />
+                  </a>
+                </p>
               </div>
             )}
           </fieldset>
