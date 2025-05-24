@@ -10,11 +10,13 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
   const [amount, setAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const publicClient = useGlobalState((state: any) => state.publicClient);
 
   const handleSend = async () => {
     setErrorMessage("");
     setSuccessMessage("");
+    setIsSending(true);
     try {
       const weiAmount = BigInt(Math.floor(parseFloat(amount) * 1e18));
       const txHash = await transactionService.sendTransaction(publicClient, walletAddress, weiAmount);
@@ -26,6 +28,8 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
     } catch (error) {
       console.error("Error sending transaction:", error);
       setErrorMessage("Error sending transaction.");
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -54,14 +58,24 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
               onChange={e => setAmount(e.target.value)}
             />
             {errorMessage && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
-            {successMessage && <p className="text-green-500 text-sm mt-1">{successMessage}</p>}
+            {successMessage && (
+              <div className="w-full">
+                <p className="text-green-500 text-sm mt-1 break-all">{successMessage}</p>
+              </div>
+            )}
           </fieldset>
           <div className="flex justify-end gap-4 w-full mt-5">
-            <button className="btn">Close</button>
-            <button type="button" className="btn btn-secondary" onClick={handleSend}>
-              <PaperAirplaneIcon className="h-6 w-6 -ml-2 inline" />
-              Send to this address
-            </button>
+            {isSending ? (
+              <div className="btn btn-disabled loading">Sending...</div>
+            ) : (
+              <>
+                <button className="btn">Close</button>
+                <button type="button" className="btn btn-secondary" onClick={handleSend}>
+                  <PaperAirplaneIcon className="h-6 w-6 -ml-2 inline" />
+                  Send to this address
+                </button>
+              </>
+            )}
           </div>
         </form>
       </div>
