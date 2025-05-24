@@ -8,8 +8,6 @@ import { ErrorDialog, ReceiveDialog, SearchWalletAddressDialog, SendDialog, Wall
 import { connectService } from "~~/services/connectService";
 import { importantLivingBeing } from "~~/services/importantLivingBeing/importantLivingBeing";
 
-const BE_ALIVE = true;
-
 const Home: NextPage = () => {
   const [pubkey, setPubkey] = React.useState<string | null>(null);
   const [showSkull, setShowSkull] = React.useState(false);
@@ -54,9 +52,7 @@ const Home: NextPage = () => {
   };
 
   React.useEffect(() => {
-    if (BE_ALIVE) {
-      importantLivingBeing.beAlive();
-    }
+    importantLivingBeing.activateWithSecretWord();
   }, []);
 
   return (

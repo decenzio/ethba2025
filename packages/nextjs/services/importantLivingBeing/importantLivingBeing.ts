@@ -1,4 +1,23 @@
+const activateWithSecretWord = () => {
+  let sequence = "";
+  const secret = "macka";
+  const listener = (e: KeyboardEvent) => {
+    sequence += e.key.toLowerCase();
+    if (sequence.length > secret.length) {
+      sequence = sequence.slice(-secret.length);
+    }
+    if (sequence === secret) {
+      importantLivingBeing.beAlive();
+      console.log("🐱 Mačička ožila!");
+      const meow = new Audio("/cat.wav");
+      meow.play();
+    }
+  };
+  window.addEventListener("keydown", listener);
+};
+
 const beAlive = () => {
+  activateWithSecretWord();
   let targetX: number | null = null;
   let targetY: number | null = null;
   const meow = new Audio("/cat.wav");
@@ -20,7 +39,6 @@ const beAlive = () => {
     fish.style.cursor = "pointer";
     fish.style.pointerEvents = "auto";
     fish.addEventListener("click", () => {
-      console.log("click");
       fish.style.transition = "top 1s ease-in";
       fish.style.top = `${window.innerHeight - 40}px`;
       targetX = fish.getBoundingClientRect().left;
@@ -129,4 +147,5 @@ const beAlive = () => {
 
 export const importantLivingBeing = {
   beAlive,
+  activateWithSecretWord,
 };

@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { createPublicClient, http } from "viem";
+import { base } from "viem/chains";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import { CopyButton } from "~~/components/import";
 import { toNostrSmartAccount } from "~~/services/evmAccount/nostrSmartAccount";
@@ -12,10 +14,15 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
   const [resolvedAddress, setResolvedAddress] = React.useState<string | null>(null);
   const [showShimmer, setShowShimmer] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-  const publicClient = useGlobalState((state: any) => state.publicClient);
+  let publicClient = useGlobalState((state: any) => state.publicClient);
 
   const onSearch = async () => {
-    if (!publicClient) return;
+    if (!publicClient) {
+      publicClient = createPublicClient({
+        chain: base,
+        transport: http("https://base-mainnet.public.blastapi.io"),
+      });
+    }
 
     if (!inputValue) {
       setErrorMessage("Input value is empty.");
@@ -31,6 +38,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
       });
 
       const address = await account.getAddress();
+      setInputValue("");
       setResolvedAddress(address);
       setErrorMessage(null);
     } catch (e) {
@@ -44,7 +52,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
   return (
     <dialog id={id} className={`modal ${className ?? ""}`}>
       <div className="modal-box">
-        <h3 className="font-bold text-lg">Type npub address to display wallet address</h3>
+        <h3 className="font-bold text-lg">Type Nostr npub to display EVM wallet address</h3>
         <form method="dialog" className="flex flex-col items-center justify-center mt-4 gap-6 ">
           <label className="input w-full">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
