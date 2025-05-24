@@ -1,4 +1,7 @@
+import { toNostrSmartAccount } from "./evmAccount/nostrSmartAccount";
 import { nip19 } from "nostr-tools";
+import { createPublicClient, http } from "viem";
+import { base } from "viem/chains";
 
 let nostrPubkey: string | null = null;
 
@@ -44,5 +47,23 @@ export const nostrService = {
     const temp = nip19.decode(nPub).data as string;
     console.log("getNostrPubkey: ", temp);
     return temp;
+  },
+
+  async getEthAddress(nPub: string): Promise<string | null> {
+    const decodedValue = nostrService.getNostrPubkey(nPub);
+
+    const publicClient = createPublicClient({
+      chain: base,
+      transport: http("https://base-mainnet.public.blastapi.io"),
+    });
+
+    const account = await toNostrSmartAccount({
+      client: publicClient,
+      owner: `0x${decodedValue}`,
+    });
+
+    const address = await account.getAddress();
+
+    return address;
   },
 };
