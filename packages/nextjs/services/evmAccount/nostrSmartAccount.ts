@@ -1,3 +1,4 @@
+import { getSenderAddress } from "./getSenderAddress";
 import {
   type Address,
   type Assign,
@@ -9,7 +10,7 @@ import {
   type Transport,
   decodeFunctionData,
   encodeFunctionData,
-  hashTypedData
+  hashTypedData,
 } from "viem";
 import {
   type EntryPointVersion,
@@ -23,14 +24,13 @@ import {
   toSmartAccount,
 } from "viem/account-abstraction";
 import { getChainId } from "viem/actions";
+import { readContract } from "viem/actions";
 import { getAction } from "viem/utils";
-import { readContract } from "viem/actions"
-import { getSenderAddress } from "./getSenderAddress";
 
 export type GetAccountNonceParams = {
-    address: Address
-    entryPointAddress: Address
-}
+  address: Address;
+  entryPointAddress: Address;
+};
 
 /**
  * Returns the nonce of the account with the entry point.
@@ -58,16 +58,13 @@ export type GetAccountNonceParams = {
  *
  * // Return 0n
  */
-export const getAccountNonce = async (
-    client: Client,
-    args: GetAccountNonceParams
-): Promise<bigint> => {
-    const { address, entryPointAddress} = args
+export const getAccountNonce = async (client: Client, args: GetAccountNonceParams): Promise<bigint> => {
+  const { address, entryPointAddress } = args;
 
   return await getAction(
-      client,
-      readContract,
-      "readContract"
+    client,
+    readContract,
+    "readContract",
   )({
     address: entryPointAddress,
     abi: [
@@ -75,28 +72,28 @@ export const getAccountNonce = async (
         inputs: [
           {
             name: "sender",
-            type: "address"
+            type: "address",
           },
           {
             name: "key",
-            type: "uint192"
-          }
+            type: "uint192",
+          },
         ],
         name: "getNonce",
         outputs: [
           {
             name: "nonce",
-            type: "uint256"
-          }
+            type: "uint256",
+          },
         ],
         stateMutability: "view",
-        type: "function"
-      }
+        type: "function",
+      },
     ],
     functionName: "getNonce",
-    args: [address, 0n]
-  })
-}
+    args: [address, 0n],
+  });
+};
 
 const getAccountInitCode = async (owner: string, index = BigInt(0)): Promise<Hex> => {
   if (!owner) throw new Error("Owner account not found");
@@ -182,7 +179,6 @@ export type ToSimpleSmartAccountReturnType<entryPointVersion extends EntryPointV
 export async function toNostrSmartAccount<entryPointVersion extends EntryPointVersion>(
   parameters: ToSimpleSmartAccountParameters<entryPointVersion>,
 ): Promise<ToSimpleSmartAccountReturnType<entryPointVersion>> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { client, owner, factoryAddress: _factoryAddress, index = BigInt(0), address } = parameters;
 
   const entryPoint = parameters.entryPoint
@@ -364,8 +360,8 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
     async getNonce() {
       return getAccountNonce(client, {
         address: await this.getAddress(),
-        entryPointAddress: entryPoint.address
-      }).catch((e) => {
+        entryPointAddress: entryPoint.address,
+      }).catch(e => {
         console.error(e);
         return 0n;
       });
@@ -412,7 +408,12 @@ export async function toNostrSmartAccount<entryPointVersion extends EntryPointVe
       }
 
       //@ts-ignore
-      const result = await window.nostr.signEvent({ created_at: 0, kind: 96024, tags: [], content: sigHash.substring(2)});
+      const result = await window.nostr.signEvent({
+        created_at: 0,
+        kind: 96024,
+        tags: [],
+        content: sigHash.substring(2),
+      });
       return `0x${result.sig}`;
     },
   }) as Promise<ToSimpleSmartAccountReturnType<entryPointVersion>>;

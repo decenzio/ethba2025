@@ -3,7 +3,7 @@
 import React from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import { CopyButton } from "~~/components/import";
-import { toNostrSmartAccount } from "~~/services/accountService";
+import { toNostrSmartAccount } from "~~/services/evmAccount/nostrSmartAccount";
 import { nostrService } from "~~/services/nostrService";
 import { useGlobalState } from "~~/services/store/store";
 
@@ -23,7 +23,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
     }
 
     try {
-      const decodedValue = nostrService.decodeNPubkey(inputValue);
+      const decodedValue = nostrService.getNostrPubkey(inputValue);
 
       const account = await toNostrSmartAccount({
         client: publicClient,

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/16/solid";
-import { useGlobalState } from "~~/services/store/store";
 import { transactionService } from "~~/services/transactionService";
 
 const SendDialog = ({ className, id }: { className?: string; id: string }) => {
@@ -11,7 +10,6 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const publicClient = useGlobalState((state: any) => state.publicClient);
 
   const handleSend = async () => {
     setErrorMessage("");
@@ -19,9 +17,9 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
     setIsSending(true);
     try {
       const weiAmount = BigInt(Math.floor(parseFloat(amount) * 1e18));
-      const txHash = await transactionService.sendTransaction(publicClient, walletAddress, weiAmount);
+      const txHash = await transactionService.sendTransaction(walletAddress, weiAmount);
       if (txHash) {
-        setSuccessMessage(`Transaction sent! Hash: ${txHash}`);
+        setSuccessMessage(`Transaction sent! ${txHash}`);
       } else {
         setErrorMessage("Transaction failed.");
       }

@@ -26,7 +26,11 @@ type GlobalState = {
   nPubkey: string;
   setNPubKey: (nPubkey: string) => void;
   publicClient: ReturnType<typeof createPublicClient> | any;
+  evmAccount: any;
+  bundlerClient: any;
   setPublicClient: (publicClient: ReturnType<typeof createPublicClient> | any) => void;
+  setBundlerClient: (publicClient: ReturnType<any> | any) => void;
+  setEvmAccount: (publicClient: any) => void;
 };
 
 export const useGlobalState = create<GlobalState>(set => ({
@@ -37,6 +41,8 @@ export const useGlobalState = create<GlobalState>(set => ({
   walletAddress: null,
   nPubkey: "",
   publicClient: null,
+  evmAccount: null,
+  bundlerClient: null,
   setNativeCurrencyPrice: (newValue: number): void =>
     set(state => ({ nativeCurrency: { ...state.nativeCurrency, price: newValue } })),
   setIsNativeCurrencyFetching: (newValue: boolean): void =>
@@ -49,4 +55,6 @@ export const useGlobalState = create<GlobalState>(set => ({
   setWalletAddress: (walletAddress: string | null) => set(() => ({ walletAddress })),
   setNPubKey: (nPubkey: string) => set(() => ({ nPubkey })),
   setPublicClient: (publicClient: ReturnType<typeof createPublicClient> | null) => set(() => ({ publicClient })),
+  setEvmAccount: (evmAccount: ReturnType<any>) => set(() => ({ evmAccount })),
+  setBundlerClient: (bundlerClient: ReturnType<any>) => set(() => ({ bundlerClient })),
 }));

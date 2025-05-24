@@ -1,4 +1,5 @@
-import { toNostrSmartAccount } from "./accountService";
+import { toNostrSmartAccount } from "./evmAccount/nostrSmartAccount";
+import { createSmartAccountClient } from "permissionless";
 import { createPublicClient, http } from "viem";
 import { base } from "viem/chains";
 import { nostrService } from "~~/services/nostrService";
@@ -9,11 +10,12 @@ export const connectService = {
   async connect(): Promise<ConnectService | null> {
     await nostrService.connect();
     const pubkey: string | null = nostrService.getPubkey();
-    const nPubkey: string | null = nostrService.getNPubkey();
+    const npub: string | null = nostrService.getNostrNpub();
 
-    if (!nPubkey || !pubkey) {
+    if (!npub || !pubkey) {
       return null;
     }
+
     const publicClient = createPublicClient({
       chain: base,
       transport: http("https://base-mainnet.public.blastapi.io"),
@@ -21,16 +23,26 @@ export const connectService = {
 
     useGlobalState.getState().setPublicClient(publicClient);
 
-    const account = await toNostrSmartAccount({
+    const evmAccount = await toNostrSmartAccount({
       client: publicClient,
       owner: `0x${pubkey}`,
     });
 
-    const ethPubKey = (await account.getAddress()).toString();
+    useGlobalState.getState().setEvmAccount(evmAccount);
+
+    const bundlerClient = createSmartAccountClient({
+      account: evmAccount,
+      chain: base,
+      bundlerTransport: http(`https://api.pimlico.io/v2/8453/rpc?apikey=pim_X5CHVGtEhbJLu7Wj4H8fDC`), // Use any bundler url
+    });
+
+    useGlobalState.getState().setBundlerClient(bundlerClient);
+
+    const ethPubKey = (await evmAccount.getAddress()).toString();
 
     useGlobalState.getState().setWalletAddress(ethPubKey);
-    useGlobalState.getState().setNPubKey(nPubkey);
+    useGlobalState.getState().setNPubKey(npub);
 
-    return { ethPubkey: ethPubKey, nPubkey: nPubkey };
+    return { ethPubkey: ethPubKey, nPubkey: npub };
   },
 };
