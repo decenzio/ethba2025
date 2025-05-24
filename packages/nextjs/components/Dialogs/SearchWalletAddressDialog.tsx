@@ -44,7 +44,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
   return (
     <dialog id={id} className={`modal ${className ?? ""}`}>
       <div className="modal-box">
-        <h3 className="font-bold text-lg">Type nbum address to receive wallet address of recipient</h3>
+        <h3 className="font-bold text-lg">Type npub address to display wallet address</h3>
         <form method="dialog" className="flex flex-col items-center justify-center mt-4 gap-6 ">
           <label className="input w-full">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
             <input
               type="search"
               className="grow input-lg"
-              placeholder="Type nbum address"
+              placeholder="Type npub"
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
             />
@@ -86,7 +86,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
             <button className="btn">Close</button>
             <button type="button" className="btn btn-secondary" onClick={onSearch}>
               <MagnifyingGlassIcon className="h-6 w-6 -ml-2 inline" />
-              Search
+              Get
             </button>
           </div>
         </form>

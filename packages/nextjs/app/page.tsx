@@ -70,7 +70,7 @@ const Home: NextPage = () => {
               onClick={() => handleOpenModal("wallet-search-modal")}
             >
               <MagnifyingGlassCircleIcon className="h-6 w-6 mr-2 inline" />
-              Search address of npub
+              Get address from npub
             </button>
           </div>
         ) : (
@@ -114,7 +114,7 @@ const Home: NextPage = () => {
                     onClick={() => handleOpenModal("wallet-search-modal")}
                   >
                     <MagnifyingGlassCircleIcon className="h-6 w-6 mr-2 inline" />
-                    Search address of npub
+                    Get address from npub
                   </button>
                 </div>
               </div>
