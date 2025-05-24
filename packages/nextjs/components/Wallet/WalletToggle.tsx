@@ -3,7 +3,7 @@ import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useGlobalState } from "~~/services/store/store";
 
 const WalletToggle = ({ className }: { className?: string }) => {
-  const walletInfo = useGlobalState(state => state.walletInfo);
+  const walletAddress = useGlobalState(state => state.walletAddress);
   const nPubkey = useGlobalState(state => state.nPubkey);
 
   const handleCopy = async (value: string) => {
@@ -46,11 +46,11 @@ const WalletToggle = ({ className }: { className?: string }) => {
         {`${nPubkey.slice(0, 6)}…${nPubkey.slice(-6)}`}
       </div>
       <div tabIndex={0} className="dropdown-content card card-md bg-accent-content/30 backdrop-blur-lg z-1 shadow-lg">
-        {walletInfo && (
+        {walletAddress && (
           <div className="card-body space-y-2 text-sm text-neutral-content">
             <span className="font-bold opacity-[.6]">Connected wallet information</span>
             <WalletField label="Nostr Pubkey" value={nPubkey} />
-            <WalletField label="Wallet Address" value={walletInfo.walletAddress} />
+            <WalletField label="Wallet Address" value={walletAddress} />
           </div>
         )}
       </div>

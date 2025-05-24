@@ -5,18 +5,18 @@ import { CopyButton } from "~~/components/import";
 import { useGlobalState } from "~~/services/store/store";
 
 const ReceiveDialog = ({ className, id }: { className?: string; id: string }) => {
-  const walletInfo = useGlobalState(state => state.walletInfo);
+  const walletAddress = useGlobalState(state => state.walletAddress);
 
   return (
     <dialog id={id} className={`modal ${className ?? ""}`}>
       <div className="modal-box w-[460px]">
         <h3 className="font-bold text-lg">Your wallet information</h3>
         <p className="mb-4">
-          {walletInfo?.walletAddress} <CopyButton value={walletInfo?.walletAddress ?? ""} />
+          {walletAddress} <CopyButton value={walletAddress ?? ""} />
         </p>
-        {walletInfo?.walletAddress && (
+        {walletAddress && (
           <img
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=380x380&data=${encodeURIComponent(walletInfo.walletAddress)}`}
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=380x380&data=${encodeURIComponent(walletAddress)}`}
             alt="Wallet QR Code"
             className="w-full"
           />

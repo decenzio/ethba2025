@@ -1,7 +1,6 @@
 import { createPublicClient } from "viem";
 import { create } from "zustand";
 import scaffoldConfig from "~~/scaffold.config";
-import { WalletInfo } from "~~/types/walletInfo";
 import { ChainWithAttributes, NETWORKS_EXTRA_DATA } from "~~/utils/scaffold-eth";
 
 /**
@@ -22,11 +21,11 @@ type GlobalState = {
   setIsNativeCurrencyFetching: (newIsNativeCurrencyFetching: boolean) => void;
   targetNetwork: ChainWithAttributes;
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => void;
-  walletInfo: WalletInfo | null;
-  setWalletInfo: (walletInfo: WalletInfo | null) => void;
+  walletAddress: string | null;
+  setWalletAddress: (walletAddress: string | null) => void;
   nPubkey: string;
   setNPubKey: (nPubkey: string) => void;
-  publicClient: ReturnType<typeof createPublicClient> | null;
+  publicClient: ReturnType<typeof createPublicClient> | any;
   setPublicClient: (publicClient: ReturnType<typeof createPublicClient> | any) => void;
 };
 
@@ -35,7 +34,7 @@ export const useGlobalState = create<GlobalState>(set => ({
     price: 0,
     isFetching: true,
   },
-  walletInfo: null,
+  walletAddress: null,
   nPubkey: "",
   publicClient: null,
   setNativeCurrencyPrice: (newValue: number): void =>
@@ -47,7 +46,7 @@ export const useGlobalState = create<GlobalState>(set => ({
     ...NETWORKS_EXTRA_DATA[scaffoldConfig.targetNetworks[0].id],
   },
   setTargetNetwork: (newTargetNetwork: ChainWithAttributes) => set(() => ({ targetNetwork: newTargetNetwork })),
-  setWalletInfo: (walletInfo: WalletInfo | null) => set(() => ({ walletInfo })),
+  setWalletAddress: (walletAddress: string | null) => set(() => ({ walletAddress })),
   setNPubKey: (nPubkey: string) => set(() => ({ nPubkey })),
   setPublicClient: (publicClient: ReturnType<typeof createPublicClient> | null) => set(() => ({ publicClient })),
 }));

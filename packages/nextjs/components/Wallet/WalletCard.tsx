@@ -3,9 +3,8 @@ import { WalletInteraction } from "~~/components/import";
 import { useGlobalState } from "~~/services/store/store";
 
 const WalletCard = ({ className }: { className?: string }) => {
-  const walletInfo = useGlobalState(state => state.walletInfo);
-
-  if (!walletInfo) {
+  const walletAddress = useGlobalState(state => state.walletAddress);
+  if (!walletAddress) {
     return <p>No wallet connected.</p>;
   }
 
@@ -13,7 +12,7 @@ const WalletCard = ({ className }: { className?: string }) => {
     <div className={className}>
       <div className="relative">
         <Balance
-          address={"0x0AAD784EB328eDf8b8fAF1c7416C3dbFD1605e0A"}
+          address={walletAddress}
           render={({ isError }) => {
             let bgClasses = "bg-white pulse-size";
             if (isError) {
@@ -49,7 +48,7 @@ const WalletCard = ({ className }: { className?: string }) => {
           <div className="card-body min-h-[250px]">
             <h2 className="card-title text-lg font-semibold opacity-80 tracking-wide">Wallet Balance</h2>
             <div className="tooltip tooltip-left" data-tip="Click to change currency">
-              <Balance address={"0x0AAD784EB328eDf8b8fAF1c7416C3dbFD1605e0A"} />
+              <Balance address={walletAddress} />
             </div>
             <div className="card-actions justify-end mt-auto">
               <WalletInteraction />
