@@ -13,15 +13,11 @@ const WalletInformation = ({ className }: { className?: string }) => {
     <div className={className}>
       <div className="relative">
         <Balance
-          address={"vitalik.eth"}
-          render={({ display, isLoading, isError }) => {
+          address={"0x0AAD784EB328eDf8b8fAF1c7416C3dbFD1605e0A"}
+          render={({ isError }) => {
             let bgClasses = "bg-white pulse-size";
             if (isError) {
-              //   wtf, it is correct even with error, so...
               bgClasses = "bg-red-500 opacity-50 transition-all scale-[1.4]";
-              bgClasses = "bg-white pulse-size";
-            } else if (!isLoading) {
-              bgClasses = "bg-green-400 opacity-40 pulse-size";
             }
 
             return (
@@ -29,7 +25,6 @@ const WalletInformation = ({ className }: { className?: string }) => {
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
                   <div className={`w-[300px] h-[300px] rounded-full ${bgClasses} opacity-10`}></div>
                 </div>
-                <div className="text-2xl h-[40px] flex items-center">{display}</div>
               </>
             );
           }}
@@ -40,7 +35,7 @@ const WalletInformation = ({ className }: { className?: string }) => {
             <div className="">
               <Balance address={"0x0AAD784EB328eDf8b8fAF1c7416C3dbFD1605e0A"} />
             </div>
-            <div className="card-actions justify-end mt-4">
+            <div className="card-actions justify-end mt-auto">
               <WalletInteraction />
             </div>
           </div>

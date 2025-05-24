@@ -92,3 +92,31 @@
 .pulse-size {
   animation: pulse-size 3s ease-in-out infinite;
 }
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 1.5s ease forwards;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+.delay-1000 {
+  animation-delay: 1000ms;
+}
