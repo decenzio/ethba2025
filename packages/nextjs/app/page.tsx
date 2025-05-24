@@ -3,7 +3,7 @@
 import React from "react";
 import type { NextPage } from "next";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { WalletInformation } from "~~/components/import";
+import { ReceiveDialog, SendDialog, WalletInformation } from "~~/components/import";
 import { connectService } from "~~/services/connectService";
 
 const Home: NextPage = () => {
@@ -57,6 +57,8 @@ const Home: NextPage = () => {
           </div>
         )}
       </div>
+      <ReceiveDialog id="receive-modal" />
+      <SendDialog id="send-modal" />
     </div>
   );
 };

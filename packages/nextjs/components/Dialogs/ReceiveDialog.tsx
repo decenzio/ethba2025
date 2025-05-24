@@ -9,7 +9,7 @@ const ReceiveDialog = ({ className, id }: { className?: string; id: string }) =>
 
   return (
     <dialog id={id} className={`modal ${className ?? ""}`}>
-      <div className="modal-box w-[420px]">
+      <div className="modal-box w-[460px]">
         <h3 className="font-bold text-lg">Your wallet information</h3>
         <p className="mb-4">
           {walletInfo?.ethAddress} <CopyButton value={walletInfo?.ethAddress ?? ""} />
