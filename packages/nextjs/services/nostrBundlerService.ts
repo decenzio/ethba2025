@@ -2,7 +2,7 @@ import { SimplePool, finalizeEvent, generateSecretKey } from "nostr-tools";
 import { stringifyWithBigInt } from "~~/utils/utils";
 
 const pool = new SimplePool();
-const relays = ["wss://nostr.mutinywallet.com", "wss://cache2.primal.net", "wss://relay.damus.io"];
+const relays = ["wss://relay.primal.net", "wss://nos.lol", "wss://relay.damus.io"];
 const sk = generateSecretKey();
 
 export const nostrBundlerService = {
