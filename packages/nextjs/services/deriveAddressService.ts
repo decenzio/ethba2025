@@ -1,25 +1,24 @@
 import { getCreate2Address } from "@ethersproject/address";
+// still needed
 import { ec as EC } from "elliptic";
-import { getAddress, id, keccak256 } from "ethers";
+import { getAddress, getBytes, id, keccak256 } from "ethers";
 import { WalletInfo } from "~~/types/walletInfo";
 
 const ec = new EC("secp256k1");
 
 export function pubkeyToEthAddress(pubkey: string): string {
-  // Convert raw 32-byte pubkey (X-only from Nostr) to a compressed format (prefix 02 for even Y)
   const compressedPubkey = `02${pubkey}`;
   const key = ec.keyFromPublic(compressedPubkey, "hex");
-
-  // Get uncompressed public key (04 + X + Y)
   const uncompressed = key.getPublic(false, "hex");
 
-  const uncompressedBytes = Uint8Array.from(Buffer.from(uncompressed, "hex"));
+  const uncompressedBytes = getBytes(`0x${uncompressed}`);
   const ethAddress = keccak256(uncompressedBytes).slice(-40);
-  return getAddress("0x" + ethAddress);
+  return getAddress(`0x${ethAddress}`);
 }
 
 export function computeSmartWalletAddress(factory: string, salt: string, initCode: string): string {
-  return getCreate2Address(factory, salt, keccak256(Buffer.from(initCode.slice(2), "hex")));
+  const initCodeHash = keccak256(getBytes(initCode));
+  return getCreate2Address(factory, salt, initCodeHash);
 }
 
 export function generateWalletInfo(
@@ -29,7 +28,7 @@ export function generateWalletInfo(
   salt: string,
 ): WalletInfo {
   const ethAddress = pubkeyToEthAddress(nostrPubkey);
-  const saltId = id(salt); // hashes the UTF-8 bytes of the salt string
+  const saltId = id(salt);
   const walletAddress = computeSmartWalletAddress(factoryAddress, saltId, initCode);
 
   return {
