@@ -1,5 +1,4 @@
 import { toNostrSmartAccount } from "./accountService";
-import { createSmartAccountClient } from "permissionless";
 import { createPublicClient, http } from "viem";
 import { base } from "viem/chains";
 import { generateWalletInfo } from "~~/services/deriveAddressService";
@@ -38,24 +37,6 @@ export const connectService = {
       client: publicClient,
       owner: `0x${pubkey}`,
     });
-
-    // Create the required clients.
-    const bundlerClient = createSmartAccountClient({
-      account,
-      chain: base,
-      bundlerTransport: http(`https://api.pimlico.io/v2/8453/rpc?apikey=pim_X5CHVGtEhbJLu7Wj4H8fDC`), // Use any bundler url
-    });
-
-    const estimateFees = await publicClient.estimateFeesPerGas();
-
-    const txHash = await bundlerClient.sendTransaction({
-      to: "0x66bAd48301609adaa01CB3140D1b1D92bFa03dD5", // address you want to send to
-      value: BigInt(1e13), // amount in wei (e.g., 0.01 ETH)
-      data: "0x", // optional calldata, '0x' for simple ETH transfer
-      maxFeePerGas: estimateFees.maxFeePerGas * 15n,
-      maxPriorityFeePerGas: 1250000n,
-    });
-
     const ethPubKey = (await account.getAddress()).toString();
 
     // Tu sa zevraj posielaju kokotiny
