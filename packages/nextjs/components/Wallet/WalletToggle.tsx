@@ -23,12 +23,13 @@ const WalletToggle = ({ className }: { className?: string }) => {
   const WalletField = ({ label, value }: { label: string; value: string }) => (
     <div className="flex flex-col">
       <span className="font-bold">{label}</span>
-      <span className="flex gap-1 items-center">
+      <span
+        className="flex gap-1 items-center tooltip tooltip-left cursor-pointer"
+        onClick={() => handleCopy(value)}
+        data-tip="Copy"
+      >
         <button>
-          <DocumentDuplicateIcon
-            onClick={() => handleCopy(value)}
-            className="h-[15px] opacity-[.4] hover:opacity-100 cursor-pointer transition-all"
-          />
+          <DocumentDuplicateIcon className="h-[15px] opacity-[.4] hover:opacity-100  transition-all" />
         </button>
         {value}
       </span>
@@ -50,7 +51,7 @@ const WalletToggle = ({ className }: { className?: string }) => {
         {walletInfo && (
           <div className="card-body space-y-2 text-sm text-neutral-content">
             <span className="font-bold opacity-[.6]">Connected wallet information</span>
-            <WalletField label="Nostr Pubkey" value={walletInfo.nostrPubkey} />
+            <WalletField label="Nostr Pubkey" value={nPubkey} />
             <WalletField label="Ethereum Address" value={walletInfo.ethAddress} />
             <WalletField label="Wallet Address" value={walletInfo.walletAddress} />
           </div>

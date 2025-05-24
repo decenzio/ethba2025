@@ -18,7 +18,7 @@ const CopyButton = ({ className, value }: { className?: string; value: string })
   };
 
   return (
-    <button className={className}>
+    <button className={className + " tooltip"} data-tip="Copy">
       <DocumentDuplicateIcon
         onClick={() => handleCopy(value)}
         className="h-[15px] opacity-[.4] hover:opacity-100 cursor-pointer transition-all"
