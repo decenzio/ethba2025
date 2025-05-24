@@ -1,6 +1,6 @@
 import { toNostrSmartAccount } from "./evmAccount/nostrSmartAccount";
 import { createSmartAccountClient } from "permissionless";
-import { createPublicClient, http } from "viem";
+import { createPublicClient, http, webSocket } from "viem";
 import { base } from "viem/chains";
 import { nostrService } from "~~/services/nostrService";
 import { useGlobalState } from "~~/services/store/store";
@@ -18,7 +18,7 @@ export const connectService = {
 
     const publicClient = createPublicClient({
       chain: base,
-      transport: http("https://base-mainnet.public.blastapi.io"),
+      transport: webSocket("wss://base-mainnet.blastapi.io/5648ecee-3f48-4b1f-b060-824a76b34d94"),
     });
 
     useGlobalState.getState().setPublicClient(publicClient);
