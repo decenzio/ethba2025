@@ -9,7 +9,7 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
   const [walletAddress, setWalletAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [successHash, setSuccessHash] = useState("fdf8cbd7183fad2f641c58e17345576");
+  const [successHash, setSuccessHash] = useState("");
   const [isSending, setIsSending] = useState(false);
 
   const handleSend = async () => {
