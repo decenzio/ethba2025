@@ -7,7 +7,7 @@ const beAlive = () => {
   if (!track) {
     track = document.createElement("div");
     track.id = "emoji-walk-track";
-    track.className = "fixed top-0 left-0 w-full h-full z-50";
+    track.className = "fixed top-0 left-0 w-full h-full z-50 pointer-events-none";
     document.body.appendChild(track);
     const fish = document.createElement("div");
     fish.textContent = "🐟";
