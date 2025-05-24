@@ -7,12 +7,15 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { ErrorDialog, ReceiveDialog, SearchWalletAddressDialog, SendDialog, WalletCard } from "~~/components/import";
 import { connectService } from "~~/services/connectService";
 import { importantLivingBeing } from "~~/services/importantLivingBeing/importantLivingBeing";
+import { useGlobalState } from "~~/services/store/store";
 
 const Home: NextPage = () => {
   const [pubkey, setPubkey] = React.useState<string | null>(null);
   const [showSkull, setShowSkull] = React.useState(false);
   const [bouncing, setBouncing] = React.useState(false);
   const [isNostrAvalaible, setNostrAvalaible] = React.useState(false);
+
+  const nPubkey = useGlobalState(state => state.nPubkey);
 
   // Listing to nostr pubkey changes
   React.useEffect(() => {
@@ -25,10 +28,15 @@ const Home: NextPage = () => {
     // @ts-ignore
     setNostrAvalaible(!!window.nostr);
 
+    if (nPubkey) {
+      setPubkey(nPubkey);
+    } else {
+      setPubkey(null);
+    }
     return () => {
       window.removeEventListener("nostr:pubkey", handlePubkeyChange as EventListener);
     };
-  }, []);
+  }, [nPubkey]);
 
   const handleConnectButton = async () => {
     const response = await connectService.connect();
