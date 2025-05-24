@@ -33,10 +33,20 @@ export const nostrService = {
     return nostrPubkey;
   },
 
+  /**
+   * Returns the Nostr public key in nPub format.
+   * If the public key is not set, returns null.
+   */
   getNPubkey(): string | null {
     if (!nostrPubkey) return null;
     return nip19.npubEncode(nostrPubkey);
   },
+
+  /**
+   * Decodes a Nostr public key (nPub) to its raw hex format.
+   * @param nPub - The Nostr public key in nPub format.
+   * @returns The decoded public key in hex format, or null if the input is invalid.
+   */
   decodeNPubkey(nPub: string): string | null {
     if (!nPub) return null;
     return nip19.decode(nPub).data as string;
