@@ -4,7 +4,7 @@ import React from "react";
 import type { NextPage } from "next";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { ReceiveDialog, SearchWalletAddressDialog, SendDialog, WalletCard } from "~~/components/import";
+import { ErrorDialog, ReceiveDialog, SearchWalletAddressDialog, SendDialog, WalletCard } from "~~/components/import";
 import { connectService } from "~~/services/connectService";
 
 const Home: NextPage = () => {
@@ -24,7 +24,17 @@ const Home: NextPage = () => {
   }, []);
 
   const handleConnectButton = async () => {
-    await connectService.connect();
+    const response = await connectService.connect();
+    if (!response) {
+      const errorDialog = document.getElementById("error-modal") as HTMLDialogElement | null;
+      if (errorDialog) {
+        errorDialog.showModal();
+        const titleElem = errorDialog.querySelector("h3");
+        const descElem = errorDialog.querySelector("p");
+        if (titleElem) titleElem.textContent = "Connection Error";
+        if (descElem) descElem.textContent = "Unable to connect to Nostr extension.";
+      }
+    }
   };
 
   const handleOpenModal = (id: string) => {
@@ -87,6 +97,7 @@ const Home: NextPage = () => {
       </div>
       <ReceiveDialog id="receive-modal" />
       <SendDialog id="send-modal" />
+      <ErrorDialog id="error-modal" title="Connection Error" description="Unable to connect to the Nostr extension." />
       <SearchWalletAddressDialog id="wallet-search-modal" />
     </div>
   );
