@@ -56,7 +56,9 @@ export const connectService = {
       maxPriorityFeePerGas: 1250000n,
     });
 
+    const ethPubKey = (await account.getAddress()).toString();
+
     // Tu sa zevraj posielaju kokotiny
-    return { walletInfo: walletInfo, nPubkey: nPubkey };
+    return { ethPubkey: ethPubKey, nPubkey: nPubkey };
   },
 };
