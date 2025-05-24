@@ -11,6 +11,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
   const [inputValue, setInputValue] = React.useState("");
   const [resolvedAddress, setResolvedAddress] = React.useState<string | null>(null);
   const [showShimmer, setShowShimmer] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const publicClient = useGlobalState((state: any) => state.publicClient);
 
   const onSearch = async () => {
@@ -21,16 +22,21 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
       return;
     }
 
-    const decodedValue = nostrService.decodeNPubkey(inputValue);
+    try {
+      const decodedValue = nostrService.decodeNPubkey(inputValue);
 
-    const account = await toNostrSmartAccount({
-      client: publicClient,
-      owner: `0x${decodedValue}`,
-    });
+      const account = await toNostrSmartAccount({
+        client: publicClient,
+        owner: `0x${decodedValue}`,
+      });
 
-    const address = await account.getAddress();
-
-    setResolvedAddress(address);
+      const address = await account.getAddress();
+      setResolvedAddress(address);
+      setErrorMessage(null);
+    } catch (e) {
+      console.error("Something went wrong", e);
+      setErrorMessage("Invalid address or network error. Please try again.");
+    }
     setShowShimmer(true);
     setTimeout(() => setShowShimmer(false), 1500);
   };
@@ -39,7 +45,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
     <dialog id={id} className={`modal ${className ?? ""}`}>
       <div className="modal-box">
         <h3 className="font-bold text-lg">Type nbum address to receive wallet address of recipient</h3>
-        <form method="dialog" className="flex flex-col items-center justify-center mt-4 gap-8 ">
+        <form method="dialog" className="flex flex-col items-center justify-center mt-4 gap-6 ">
           <label className="input w-full">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
@@ -55,6 +61,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
               onChange={e => setInputValue(e.target.value)}
             />
           </label>
+          {errorMessage && <div className="text-error text-sm w-full text-left">{errorMessage}</div>}
           {resolvedAddress && (
             <div className="card w-full relative overflow-hidden bg-accent-content shadow-xl text-white w-110 transition-transform duration-300 ease-out">
               {showShimmer && <div className="shimmer-overlay"></div>}
