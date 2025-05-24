@@ -58,7 +58,17 @@ export const Header = () => {
   });
 
   const handleConnectClick = async () => {
-    await connectService.connect();
+    const response = await connectService.connect();
+    if (!response) {
+      const errorDialog = document.getElementById("error-modal") as HTMLDialogElement | null;
+      if (errorDialog) {
+        errorDialog.showModal();
+        const titleElem = errorDialog.querySelector("h3");
+        const descElem = errorDialog.querySelector("p");
+        if (titleElem) titleElem.textContent = "Connection Error";
+        if (descElem) descElem.textContent = "Unable to connect to Nostr extension.";
+      }
+    }
   };
 
   return (
