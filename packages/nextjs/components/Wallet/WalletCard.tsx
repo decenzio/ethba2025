@@ -5,7 +5,7 @@ import { useGlobalState } from "~~/services/store/store";
 const WalletCard = ({ className }: { className?: string }) => {
   const walletAddress = useGlobalState(state => state.walletAddress);
   if (!walletAddress) {
-    return <p>No wallet connected.</p>;
+    return <p className="loading">No wallet connected.</p>;
   }
 
   return (

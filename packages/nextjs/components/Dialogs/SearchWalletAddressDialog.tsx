@@ -18,7 +18,7 @@ const SearchWalletAddressDialog = ({ className, id }: { className?: string; id: 
     if (!publicClient) return;
 
     if (!inputValue) {
-      console.error("Input value is empty");
+      setErrorMessage("Input value is empty.");
       return;
     }
 

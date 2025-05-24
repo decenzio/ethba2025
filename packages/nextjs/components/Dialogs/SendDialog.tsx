@@ -21,6 +21,15 @@ const SendDialog = ({ className, id }: { className?: string; id: string }) => {
       const txHash = await transactionService.sendTransaction(walletAddress, weiAmount);
       if (txHash) {
         setSuccessHash(txHash);
+        const toast = document.createElement("div");
+        toast.className = "toast toast-bottom toast-end z-50";
+        toast.innerHTML = `
+                    <div class="alert alert-success">
+                      <span>Transaction was sent</span>
+                    </div>
+                  `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
       } else {
         setErrorMessage("Transaction failed.");
       }

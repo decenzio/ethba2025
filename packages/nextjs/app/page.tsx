@@ -9,6 +9,8 @@ import { connectService } from "~~/services/connectService";
 
 const Home: NextPage = () => {
   const [pubkey, setPubkey] = React.useState<string | null>(null);
+  const [showSkull, setShowSkull] = React.useState(false);
+  const [bouncing, setBouncing] = React.useState(false);
 
   // Listing to nostr pubkey changes
   React.useEffect(() => {
@@ -61,7 +63,19 @@ const Home: NextPage = () => {
         ) : (
           <div className="px-20 flex flex-col gap-4 m-auto w-fit justify-center items-start grow h-fill text-4xl">
             <div className="flex flex-col gap-4 animate-fadeIn item-start">
-              <p className="text-5xl m-0 opacity-0 animate-slideIn delay-100">Hello👋</p>
+              <p className="text-5xl m-0 opacity-0 animate-slideIn delay-100">
+                {showSkull ? "Bye " : "Hello "}
+                <span
+                  className={`cursor-pointer inline-block transition-transform duration-200 ${bouncing ? "scale-125" : ""}`}
+                  onClick={() => {
+                    setShowSkull(true);
+                    setBouncing(true);
+                    setTimeout(() => setBouncing(false), 300);
+                  }}
+                >
+                  {showSkull ? "💀" : "👋"}
+                </span>
+              </p>
               <p className="m-0 opacity-0 animate-slideIn delay-500 ">
                 to continue, <br />
                 please{" "}
@@ -80,8 +94,8 @@ const Home: NextPage = () => {
               </div>
               <div className="opacity-0 animate-slideIn delay-1500">
                 <hr className="opacity-20 mt-5" />
-                <p className="opacity-70 text-base hover:opacity-100 transition-all">
-                  <div className="mb-3">Or just search for a wallet address using the npub </div>
+                <div className="opacity-70 text-base hover:opacity-100 transition-all">
+                  <div className="mb-3 mt-5">Or just search for a wallet address using the npub </div>
                   <button
                     className="btn btn-dash hover:btn-outline hover:border-white"
                     onClick={() => handleOpenModal("wallet-search-modal")}
@@ -89,7 +103,7 @@ const Home: NextPage = () => {
                     <MagnifyingGlassCircleIcon className="h-6 w-6 mr-2 inline" />
                     Search address of npub
                   </button>
-                </p>
+                </div>
               </div>
             </div>
           </div>
