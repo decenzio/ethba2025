@@ -45,12 +45,14 @@ const Home: NextPage = () => {
                 </u>{" "}
                 to your nost account.
               </p>
-              <button
-                className="btn btn-lg btn-secondary mt-5 hover:gap-4 transition-all opacity-0 w-fit animate-slideIn delay-1000"
-                onClick={handleConnectButoon}
-              >
-                Connect <ArrowRightIcon className="h-6 w-6 ml-2 inline" />
-              </button>
+              <div className="opacity-0 animate-slideIn delay-1000">
+                <button
+                  className="btn btn-lg btn-secondary mt-5 hover:gap-4 transition-all w-fit "
+                  onClick={handleConnectButoon}
+                >
+                  Connect <ArrowRightIcon className="h-6 w-6 ml-2 inline" />
+                </button>
+              </div>
             </div>
           </div>
         )}
