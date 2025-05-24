@@ -9,7 +9,6 @@ import "solidity-coverage";
 import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
-import "@nomicfoundation/hardhat-foundry";
 import { task } from "hardhat/config";
 import generateTsAbis from "./scripts/generateTsAbis";
 
@@ -30,7 +29,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.8.28",
+        version: "0.8.20",
         settings: {
           optimizer: {
             enabled: true,
