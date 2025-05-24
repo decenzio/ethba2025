@@ -120,3 +120,30 @@
 .delay-1000 {
   animation-delay: 1000ms;
 }
+
+@keyframes shimmer-move {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+          to right,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+  );
+  transform: translateX(-100%);
+  animation: slideIn 0.2s ease-out, shimmer-move 0.8s ease-out forwards;
+  opacity: 0.4;
+  pointer-events: none;
+}

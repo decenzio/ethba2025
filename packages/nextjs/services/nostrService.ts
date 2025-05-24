@@ -37,4 +37,8 @@ export const nostrService = {
     if (!nostrPubkey) return null;
     return nip19.npubEncode(nostrPubkey);
   },
+  decodeNPubkey(nPub: string): string | null {
+    if (!nPub) return null;
+    return nip19.decode(nPub).data as string;
+  },
 };

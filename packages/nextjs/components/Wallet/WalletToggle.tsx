@@ -52,7 +52,6 @@ const WalletToggle = ({ className }: { className?: string }) => {
           <div className="card-body space-y-2 text-sm text-neutral-content">
             <span className="font-bold opacity-[.6]">Connected wallet information</span>
             <WalletField label="Nostr Pubkey" value={nPubkey} />
-            <WalletField label="Ethereum Address" value={walletInfo.ethAddress} />
             <WalletField label="Wallet Address" value={walletInfo.walletAddress} />
           </div>
         )}
