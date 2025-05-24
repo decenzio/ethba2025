@@ -27,7 +27,7 @@ type GlobalState = {
   nPubkey: string;
   setNPubKey: (nPubkey: string) => void;
   publicClient: ReturnType<typeof createPublicClient> | null;
-  setPublicClient: (publicClient: ReturnType<typeof createPublicClient> | null) => void;
+  setPublicClient: (publicClient: ReturnType<typeof createPublicClient> | any) => void;
 };
 
 export const useGlobalState = create<GlobalState>(set => ({
