@@ -2,7 +2,7 @@ import { Balance } from "../scaffold-eth/Balance";
 import { WalletInteraction } from "~~/components/import";
 import { useGlobalState } from "~~/services/store/store";
 
-const WalletInformation = ({ className }: { className?: string }) => {
+const WalletCard = ({ className }: { className?: string }) => {
   const walletInfo = useGlobalState(state => state.walletInfo);
 
   if (!walletInfo) {
@@ -61,4 +61,4 @@ const WalletInformation = ({ className }: { className?: string }) => {
   );
 };
 
-export default WalletInformation;
+export default WalletCard;

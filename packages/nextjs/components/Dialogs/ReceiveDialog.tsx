@@ -12,11 +12,11 @@ const ReceiveDialog = ({ className, id }: { className?: string; id: string }) =>
       <div className="modal-box w-[460px]">
         <h3 className="font-bold text-lg">Your wallet information</h3>
         <p className="mb-4">
-          {walletInfo?.ethAddress} <CopyButton value={walletInfo?.ethAddress ?? ""} />
+          {walletInfo?.walletAddress} <CopyButton value={walletInfo?.walletAddress ?? ""} />
         </p>
-        {walletInfo?.ethAddress && (
+        {walletInfo?.walletAddress && (
           <img
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=380x380&data=${encodeURIComponent(walletInfo.ethAddress)}`}
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=380x380&data=${encodeURIComponent(walletInfo.walletAddress)}`}
             alt="Wallet QR Code"
             className="w-full"
           />
