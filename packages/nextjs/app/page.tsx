@@ -3,7 +3,7 @@
 import React from "react";
 import type { NextPage } from "next";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { WalletInformation } from "~~/components/Wallet/import";
+import { WalletInformation } from "~~/components/import";
 import { connectService } from "~~/services/connectService";
 
 const Home: NextPage = () => {

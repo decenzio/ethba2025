@@ -1,5 +1,5 @@
 import { Balance } from "../scaffold-eth/Balance";
-import WalletInteraction from "~~/components/Wallet/WalletInteraction";
+import { WalletInteraction } from "~~/components/import";
 import { useGlobalState } from "~~/services/store/store";
 
 const WalletInformation = ({ className }: { className?: string }) => {
@@ -31,8 +31,8 @@ const WalletInformation = ({ className }: { className?: string }) => {
         />
         <div className="card bg-gradient-to-r from-accent-content via-secondary/100 to-accent shadow-xl text-white w-110">
           <div className="card-body min-h-[250px]">
-            <h2 className="card-title text-lg font-semibold">Wallet Balance</h2>
-            <div className="">
+            <h2 className="card-title text-lg font-semibold opacity-80 tracking-wide">Wallet Balance</h2>
+            <div className="tooltip tooltip-left" data-tip="Click to change currency">
               <Balance address={"0x0AAD784EB328eDf8b8fAF1c7416C3dbFD1605e0A"} />
             </div>
             <div className="card-actions justify-end mt-auto">
