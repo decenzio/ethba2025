@@ -6,6 +6,9 @@ import { MagnifyingGlassCircleIcon } from "@heroicons/react/16/solid";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { ErrorDialog, ReceiveDialog, SearchWalletAddressDialog, SendDialog, WalletCard } from "~~/components/import";
 import { connectService } from "~~/services/connectService";
+import { importantLivingBeing } from "~~/services/importantLivingBeing";
+
+const BE_ALIVE = true;
 
 const Home: NextPage = () => {
   const [pubkey, setPubkey] = React.useState<string | null>(null);
@@ -45,6 +48,12 @@ const Home: NextPage = () => {
       modal.showModal();
     }
   };
+
+  React.useEffect(() => {
+    if (BE_ALIVE) {
+      importantLivingBeing.beAlive();
+    }
+  }, []);
 
   return (
     <div className={"container mx-auto"}>
