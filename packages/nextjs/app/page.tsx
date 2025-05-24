@@ -14,6 +14,7 @@ const Home: NextPage = () => {
   const [pubkey, setPubkey] = React.useState<string | null>(null);
   const [showSkull, setShowSkull] = React.useState(false);
   const [bouncing, setBouncing] = React.useState(false);
+  const [isNostrAvalaible, setNostrAvalaible] = React.useState(false);
 
   // Listing to nostr pubkey changes
   React.useEffect(() => {
@@ -22,6 +23,9 @@ const Home: NextPage = () => {
     };
 
     window.addEventListener("nostr:pubkey", handlePubkeyChange as EventListener);
+
+    // @ts-ignore
+    setNostrAvalaible(!!window.nostr);
 
     return () => {
       window.removeEventListener("nostr:pubkey", handlePubkeyChange as EventListener);
@@ -101,10 +105,10 @@ const Home: NextPage = () => {
                   Connect <ArrowRightIcon className="h-6 w-6 ml-2 inline" />
                 </button>
               </div>
-              <div className="opacity-0 animate-slideIn delay-1500">
+              <div className={"opacity-0 " + (isNostrAvalaible ? "animate-slideIn delay-1500" : " opacity-0")}>
                 <hr className="opacity-20 mt-5" />
                 <div className="opacity-70 text-base hover:opacity-100 transition-all">
-                  <div className="mb-3 mt-5">Or just search for a wallet address using the npub </div>
+                  <div className="mb-3 mt-5">Or just search for a wallet address using the npub.</div>
                   <button
                     className="btn btn-dash hover:btn-outline hover:border-white"
                     onClick={() => handleOpenModal("wallet-search-modal")}

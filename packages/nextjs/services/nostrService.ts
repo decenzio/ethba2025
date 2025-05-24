@@ -13,7 +13,7 @@ export const nostrService = {
   async connect(): Promise<string | null> {
     // @ts-ignore
     if (!window.nostr) {
-      throw new Error("nos2x extension not found");
+      return null;
     }
 
     try {
