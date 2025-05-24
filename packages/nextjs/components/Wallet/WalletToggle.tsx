@@ -1,5 +1,4 @@
 import React from "react";
-import { CreditCardIcon } from "@heroicons/react/16/solid";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { useGlobalState } from "~~/services/store/store";
 
@@ -45,7 +44,6 @@ const WalletToggle = ({ className }: { className?: string }) => {
         data-tip="Display wallet information"
       >
         {`${nPubkey.slice(0, 6)}…${nPubkey.slice(-6)}`}
-        <CreditCardIcon className="h-1/2" />
       </div>
       <div tabIndex={0} className="dropdown-content card card-md bg-accent-content/30 backdrop-blur-lg z-1 shadow-lg">
         {walletInfo && (
